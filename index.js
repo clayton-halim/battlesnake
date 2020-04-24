@@ -62,9 +62,15 @@ app.post('/move', (request, response) => {
   const snakeLength = data.you.body.length
 
   data.board.snakes.forEach(snake => {
-    if (snake.body.length < snakeLength) return
     const head = snake.body[0]
-    snake.body.forEach(coord => obstacles.add(JSON.stringify(coord)))
+    snake.body.forEach(coord => {
+      obstacles.add(JSON.stringify(coord))
+    })
+    
+    if (snake.body.length < snakeLength) {
+      obstacles.delete(head)
+      return
+    }
 
     if (snake.id === data.you.id) return
     
@@ -100,7 +106,7 @@ app.post('/move', (request, response) => {
 
   console.log(`status: ${status}`)
   console.log(path)
- 
+
   const snake_move = translateMove(headPos, path[1])
 
   console.log("MOVE: " + snake_move);
