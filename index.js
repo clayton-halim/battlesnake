@@ -16,9 +16,9 @@ function manhattanDist(p1, p2) {
   return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y)
 }
 
-function isInBounds(size, coord) {
+function isInBounds(width, height, coord) {
   const { x, y } = coord
-  return (x >= 0 && x < size) && (y >= 0 && y < size) 
+  return (x >= 0 && x < width) && (y >= 0 && y < height) 
 }
 
 function translateMove(from, to) {
@@ -57,6 +57,7 @@ app.post('/start', (request, response) => {
 app.post('/move', (request, response) => {
   const data = request.body;
   const headPos = data.you.body[0]
+  const { width, height } = data.board
   const obstacles = new Set()
 
   data.board.snakes.forEach(snake => snake.body.forEach(coord => obstacles.add(JSON.stringify(coord))))
@@ -76,7 +77,7 @@ app.post('/move', (request, response) => {
     isEnd: p => p.x == closestFoodPos.x && p.y == closestFoodPos.y,
     neighbor: p => {
       const n = adjacents.map(adj => ({ x: p.x + adj.x, y: p.y + adj.y }))
-                            .filter(coord => isInBounds(data.board.width, coord) && !obstacles.has(JSON.stringify(coord)))
+                            .filter(coord => isInBounds(width, height, coord) && !obstacles.has(JSON.stringify(coord)))
       console.log('neighbours:', n)
       return n
     },
