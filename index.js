@@ -22,7 +22,7 @@ app.use(poweredByHandler)
 // --- SNAKE LOGIC GOES BELOW THIS LINE ---
 
 app.post('/start', (request, response) => {
-  console.log("START");
+  console.log(`START [${request.body.game.id}]`)
 
   // Response data
   const data = {
@@ -35,12 +35,12 @@ app.post('/start', (request, response) => {
 })
 
 app.post('/move', (request, response) => {
-  var data = request.body;
+  const data = request.body;
 
   // Choose a random direction to move in
   possible_moves = ["up", "down", "left", "right"]
-  var choice = Math.floor(Math.random() * possible_moves.length);
-  var snake_move = possible_moves[choice];
+  const choice = Math.floor(Math.random() * possible_moves.length);
+  const snake_move = possible_moves[choice];
 
   console.log("MOVE: " + snake_move);
   return response.json({ move: snake_move })
