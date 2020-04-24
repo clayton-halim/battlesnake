@@ -59,8 +59,19 @@ app.post('/move', (request, response) => {
   const headPos = data.you.body[0]
   const { width, height } = data.board
   const obstacles = new Set()
+  const snakeLength = data.you.body.length
 
-  data.board.snakes.forEach(snake => snake.body.forEach(coord => obstacles.add(JSON.stringify(coord))))
+  data.board.snakes.forEach(snake => {
+    if (snake.body.length < snakeLength) return
+    const head = snake.body[0]
+    snake.body.forEach(coord => obstacles.add(JSON.stringify(coord)))
+
+    if (snake.id === data.you.id) return
+    
+    // Play it safe and don't try to cut off the snake
+    adjacents.map(adj => ({ x: head.x + adj.x, y: head.y + adj.y }))
+             .forEach(coord => obstacles.add(JSON.stringify(coord)))
+  })
   obstacles.delete(JSON.stringify(headPos))
 
   console.log('obstacles:')
