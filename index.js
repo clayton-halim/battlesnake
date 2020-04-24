@@ -46,7 +46,7 @@ app.post('/start', (request, response) => {
 
   // Response data
   const data = {
-    color: '#c3f0ca',
+    color: '#f582ae',
     headType: "pixel",
     tailType: "pixel"
   }
