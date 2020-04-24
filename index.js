@@ -107,7 +107,10 @@ app.post('/move', (request, response) => {
   console.log(`status: ${status}`)
   console.log(path)
 
-  const snake_move = translateMove(headPos, path[1])
+  const safeSpots = adjacents.map(adj => ({ x: headPos.x + adj.x, y: headPos.y + adj.y}))
+                             .filter(coord => isInBounds(width, height, coord) && !obstacles.has(JSON.stringify(coord)))
+
+  const snake_move = status === 'success' ? translateMove(headPos, path[1]) : translateMove(headPos, safeSpots[0])
 
   console.log("MOVE: " + snake_move);
   return response.json({ move: snake_move })
