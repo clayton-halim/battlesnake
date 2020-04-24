@@ -37,7 +37,7 @@ app.post('/start', (request, response) => {
 })
 
 app.post('/move', (request, response) => {
-  const snake_move = strategy.moveToClosestFood(request.body);
+  const snake_move = strategy.makeMove(request.body);
 
   console.log("MOVE: " + snake_move);
   return response.json({ move: snake_move })
