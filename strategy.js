@@ -142,7 +142,8 @@ function makeMove(data) {
         data.board.snakes.every(snake => snake.body.length < body.length || snake.id === data.you.id)
     const justEaten = (body[body.length - 1].x === body[body.length - 2].x) &&
                       (body[body.length - 1].y === body[body.length - 2].y)
-    const chaseTail = data.you.health > 40 && isLongestSnake  && !justEaten
+    const chaseTail = data.you.health > 80 && isLongestSnake  && !justEaten
+    console.log('CHASE TAIL:', chaseTail)
     return chaseTail ? moveToTail(data) : moveToClosestFood(data)
 }
 
