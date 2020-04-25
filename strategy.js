@@ -20,6 +20,7 @@ function translateMove(from, to) {
 
 function moveToClosestFood(data) {
   const headPos = data.you.body[0]
+  const tailPos = data.you.body[data.you.length - 1]
   const { width, height } = data.board
   const obstacles = new Set()
   const snakeLength = data.you.body.length
@@ -41,6 +42,7 @@ function moveToClosestFood(data) {
     adjacents.map(adj => ({ x: head.x + adj.x, y: head.y + adj.y }))
              .forEach(coord => obstacles.add(JSON.stringify(coord)))
   })
+  if (!data.justEaten) obstacles.delete(JSON.stringify(tailPos))
   obstacles.delete(JSON.stringify(headPos))
 
   console.log('obstacles:')
@@ -96,8 +98,8 @@ function moveToTail(data) {
       return
     }
   })
+  if (!data.justEaten) obstacles.delete(JSON.stringify(tailPos))
   obstacles.delete(JSON.stringify(headPos))
-  obstacles.delete(JSON.stringify(tailPos))
 
   console.log('obstacles:')
   console.log(Array.from(obstacles))
@@ -136,9 +138,10 @@ function makeMove(data) {
         data.board.snakes.every(snake => snake.body.length < body.length || snake.id === data.you.id)
     const justEaten = (body[body.length - 1].x === body[body.length - 2].x) &&
                       (body[body.length - 1].y === body[body.length - 2].y)
-    const chaseTail = data.you.health > 80 && isLongestSnake  && !justEaten
+    const chaseTail = data.you.health > 80 && isLongestSnake
+
     console.log('CHASE TAIL:', chaseTail)
-    return chaseTail ? moveToTail(data) : moveToClosestFood(data)
+    return chaseTail ? moveToTail({ ...data, justEaten }) : moveToClosestFood({ ...data, justEaten })
 }
 
 module.exports = {
