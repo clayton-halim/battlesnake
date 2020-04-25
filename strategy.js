@@ -95,12 +95,6 @@ function moveToTail(data) {
       obstacles.delete(head)
       return
     }
-
-    if (snake.id === data.you.id) return
-    
-    // Play it safe and don't try to cut off the snake
-    adjacents.map(adj => ({ x: head.x + adj.x, y: head.y + adj.y }))
-             .forEach(coord => obstacles.add(JSON.stringify(coord)))
   })
   obstacles.delete(JSON.stringify(headPos))
   obstacles.delete(JSON.stringify(tailPos))
